@@ -80,9 +80,21 @@ def hold_em_river(deck,board):
 #input player cards and board, determine who wins the pot
 #make a list of every player's hand strength then call another function
 #to compare	
-def hold_em_showdown(players,board):
-	hand_strength = [] 
 
+
+#hold_em_showdown function returns hand strength of remaining players
+def hold_em_showdown(players,board):
+	hand_strength = {}
+	#determine each player's hand strength
+	for key in players:
+		hand_strength[key] = []
+
+
+
+
+#hold_em_winner gets input of all hand_strength and return the
+#winner of the pot
+#def hold_em_winner(hand_strength):
 
 
 newDeck = range(0,52)
@@ -94,7 +106,7 @@ while (len(shuffledDeck) < 52) :
 	temp = newDeck[tempIndex]
 	if temp not in shuffledDeck:
 		shuffledDeck.append(temp)
-#deal cards for 4 players holdem game
+#deal cards for 4 players hold-em game
 players = hold_em_preflop(4,shuffledDeck)
 board = []
 print shuffledDeck
@@ -102,6 +114,9 @@ hold_em_flop(shuffledDeck,board)
 hold_em_turn(shuffledDeck,board)
 hold_em_river(shuffledDeck,board)
 print board
+print players
+for key in players:
+	print key
 
 
 
