@@ -344,6 +344,25 @@ def highCard(cards,strength):
 		strength = [0]+temp[-5:]
 
 
+#function gets a dict of hand strength with player index as key
+#return winner index 
+# two or more players might have same hands, so we return a list of indexes 
+def getWinner(hand_strength):
+	#get best hand_rank first
+	best = 0
+	current = 0
+	best_hands = {}
+	for key in hand_strength:
+		current = hand_strength[key][0]
+		if(current > best):
+			best = current
+	#get all hands in best ranking 
+	for key in hand_strength:
+		if(hand_strength[key][0] == best):
+			best_hands[key] = hand_strength[key]
+
+	#find the best hand in best ranking
+
 
 
 
@@ -356,6 +375,28 @@ def hold_em_showdown(players,board):
 		hand_strength[key] = []
 		seven_cards = []
 		seven_cards = players[key] + board
+		if isRoyalFlush(seven_cards,hand_strength[key]):
+			continue
+		elif isStraightFlush(seven_cards,hand_strength[key]):
+			continue
+		elif isQuads(seven_cards,hand_strength[key]):
+			continue
+		elif isFullHose(seven_cards,hand_strength[key]):
+			continue
+		elif isFlush(seven_cards,hand_strength[key]):
+			continue
+		elif isStraight(seven_cards,hand_strength[key]):
+			continue
+		elif isThreeOfAKind(seven_cards,hand_strength[key]):
+			continue
+		elif isTwoPairs(seven_cards,hand_strength[key]):
+			continue
+		elif isOnePair(seven_cards,hand_strength[key]):
+			continue
+		else:
+			highCard(seven_cards,hand_strength[key])
+
+
 
 		#Determine hand strength from best to the worst
 		#we use functions to determine hand strength 

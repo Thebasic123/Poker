@@ -91,7 +91,6 @@ def hold_em_showdown(players,board):
 
 
 
-
 #hold_em_winner gets input of all hand_strength and return the
 #winner of the pot
 #def hold_em_winner(hand_strength):
@@ -117,6 +116,5 @@ print board
 print players
 for key in players:
 	print key
-
 
 
