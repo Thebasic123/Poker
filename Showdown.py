@@ -60,7 +60,7 @@ def isRoyalFlush(cards,strength):
 		return False
 
 
-def isStraightFlush(cards):
+def isStraightFlush(cards,strength):
 	strength = []
 	flush_suit = []
 	suitH = []
@@ -100,13 +100,13 @@ def isStraightFlush(cards):
 		counter = 0
 		while counter < 5:
 			if(flush_suit[currentIndex]+1 == flush_suit[currentIndex+1]):
-				currentIndex++
-				counter++
+				currentIndex += 1
+				counter += 1
 			else:
 				break
 		if (counter == 5):
 			break
-		index++
+		index += 1
 	if(index >= 3):
 		return False
 	else:
@@ -160,7 +160,7 @@ def isFullHose(cards,strength):
 				threeOfAKind = card
 	#find the best pair
 	for card in set(temp):
-		if (temo.count(card) >= 2) and (card != threeOfAKind):
+		if (temp.count(card) >= 2) and (card != threeOfAKind):
 			if(card == 0):
 				pair = card
 				break
@@ -237,13 +237,13 @@ def isStraight(cards,strength):
 			counter = 0
 			while counter < 5:
 				if(temp[currentIndex]+1 == temp[currentIndex+1]):
-					currentIndex++
-					counter++
+					currentIndex += 1
+					counter += 1
 				else:
 					break
 			if (counter == 5):
 				break
-			index++
+			index += 1
 		if(index >= 3):
 			return False
 		else:
@@ -460,7 +460,7 @@ def getWinner(hand_strength):
 				if(best_hands[key][2] == best_FcardTwo):
 					if(best_hands[key][3] == best_FcardThree):
 						if(best_hands[key][4] == best_FcardFour):
-							if(best_hands[key][5] > best_FcardFive)
+							if(best_hands[key][5] > best_FcardFive):
 								best_FcardFive = best_hands[key][5]
 		#find the best hands
 		for key in best_hands:
@@ -619,7 +619,7 @@ def getWinner(hand_strength):
 				if(best_hands[key][2] == best_cardTwo):
 					if(best_hands[key][3] == best_cardThree):
 						if(best_hands[key][4] == best_cardFour):
-							if(best_hands[key][5] > best_cardFive)
+							if(best_hands[key][5] > best_cardFive):
 								best_cardFive = best_hands[key][5]
 		#find the best hands
 		for key in best_hands:
@@ -657,8 +657,10 @@ def hold_em_showdown(players,board):
 			continue
 		else:
 			highCard(seven_cards,hand_strength[key])
+	print hand_strength
 	winners = []
 	winners = getWinner(hand_strength)
+	print winners
 
 
 		#Determine hand strength from best to the worst

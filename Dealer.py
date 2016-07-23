@@ -4,7 +4,7 @@
 
 #!/usr/bin/env python
 import random
-
+import Showdown
 #function transfer number to card 
 #ordered by heart,diamond,spades,clubs
 def numberToCard(number):
@@ -77,34 +77,21 @@ def hold_em_river(deck,board):
 	del deck[0]
 	print 'river is '+river
 
-#input player cards and board, determine who wins the pot
-#make a list of every player's hand strength then call another function
-#to compare	
-
-
-#hold_em_showdown function returns hand strength of remaining players
-def hold_em_showdown(players,board):
-	hand_strength = {}
-	#determine each player's hand strength
-	for key in players:
-		hand_strength[key] = []
-
-
-
-#hold_em_winner gets input of all hand_strength and return the
-#winner of the pot
-#def hold_em_winner(hand_strength):
+#shuffle new deck
+def shuffleDeck(deck):
+	shuffledDeck = []
+	#randomly swap entire list
+	while (len(shuffledDeck) < 52) :
+		tempIndex = random.randint(0,51)
+		temp = newDeck[tempIndex]
+		if temp not in shuffledDeck:
+			shuffledDeck.append(temp)
+	return shuffledDeck
 
 
 newDeck = range(0,52)
 length = 52
-shuffledDeck = []
-#randomly swap entire list
-while (len(shuffledDeck) < 52) :
-	tempIndex = random.randint(0,51)
-	temp = newDeck[tempIndex]
-	if temp not in shuffledDeck:
-		shuffledDeck.append(temp)
+shuffledDeck = shuffleDeck(newDeck)
 #deal cards for 4 players hold-em game
 players = hold_em_preflop(4,shuffledDeck)
 board = []
@@ -114,7 +101,6 @@ hold_em_turn(shuffledDeck,board)
 hold_em_river(shuffledDeck,board)
 print board
 print players
-for key in players:
-	print key
+Showdown.hold_em_showdown(players,board)
 
 
