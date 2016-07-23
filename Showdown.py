@@ -352,6 +352,7 @@ def getWinner(hand_strength):
 	best = 0
 	current = 0
 	best_hands = {}
+	result = []
 	for key in hand_strength:
 		current = hand_strength[key][0]
 		if(current > best):
@@ -362,9 +363,270 @@ def getWinner(hand_strength):
 			best_hands[key] = hand_strength[key]
 
 	#find the best hand in best ranking
+	#if best hand is royal flush, return all keys
+	if(best == 9):
+		return best_hands.keys()
+	elif(best == 8):
+		best_SF_card = 0
+		for key in best_hands:
+			if(best_SF_card < best_hands[key][1]):
+				best_SF_card = best_hands[key][1]
+		for key in best_hands:
+			if(best_SF_card == best_hands[key][1]):
+				result.append(key)
+		return result
+	elif(best == 7):
+		best_quads = -1
+		best_kicker = -1 #best kicker only gets kicker for best quads
+		#get best quads first
+		for key in best_hands:
+			if(best_hands[key][1] == 0):
+				best_quads = 0
+				break
+			if(best_hands[key][1] > best_quads):
+				best_quads = best_hands[key][1]
 
+		#get best kicker
+		for key in best_hands:
+			if(best_hands[key][2] == best_quads):
+				if(best_hands[key][2] == 0):
+					best_kicker = 0
+					break
+				elif(best_hands[key][2] > best_kicker):
+					best_kicker = best_hands[key][2]
+		#get winners 
+		for key in best_hands:
+			if(best_hands[key][1]==best_quads and best_hands[key][2]==best_kicker):
+				result.append(key)
+		return result
+	elif(best == 6):
+		best_FH_three = -1
+		best_FH_pair = -1
+		#get best three of a kind in FH first
+		for key in best_hands:
+			if(best_hands[key][1] == 0):
+				best_FH_three = 0
+				break
+			if(best_hands[key][1] > best_FH_three):
+				best_FH_three = best_hands[key][1]
+		#get best pair for best three of a kind 
+		for key in best_hands:
+			if(best_hands[key][1] == best_FH_three):
+				if(best_hands[key][2] == 0):
+					best_FH_pair = 0
+					break
+				elif(best_hands[key][2] > best_FH_pair):
+					best_FH_pair = best_hands[key][2]
+		#get winners 
+		for key in best_hands:
+			if(best_hands[key][1]==best_FH_three and best_hands[key][2]==best_FH_pair):
+				result.append(key)
+		return result
+	elif(best == 5):
+		best_FcardOne = -1
+		best_FcardTwo = -1
+		best_FcardThree = -1
+		best_FcardFour = -1
+		best_FcardFive = -1
+		#find the best cardOne 
+		for key in best_hands:
+			if(best_hands[key][1] == 0):
+				best_FcardOne = 0
+				break
+			if(best_hands[key][1] > best_FcardOne):
+				best_FcardOne = best_hands[key][1]
+		#find the best cardTwo
+		for key in best_hands:
+			if(best_hands[key][1] == best_FcardOne):
+				if(best_hands[key][2] > best_FcardTwo):
+					best_FcardTwo = best_hands[key][2]
+		#find the best cardThree
+		#can't be ace
+		for key in best_hands:
+			if(best_hands[key][1] == best_FcardOne):
+				if(best_hands[key][2] == best_FcardTwo):
+					if(best_hands[key][3] > best_FcardThree):
+						best_FcardThree = best_hands[key][3]
+		#find the best cardFour
+		for key in best_hands:
+			if(best_hands[key][1] == best_FcardOne):
+				if(best_hands[key][2] == best_FcardTwo):
+					if(best_hands[key][3] == best_FcardThree):
+						if(best_hands[key][4] > best_FcardFour):
+							best_FcardFour = best_hands[key][4]
+		#find the best cardFive
+		for key in best_hands:
+			if(best_hands[key][1] == best_FcardOne):
+				if(best_hands[key][2] == best_FcardTwo):
+					if(best_hands[key][3] == best_FcardThree):
+						if(best_hands[key][4] == best_FcardFour):
+							if(best_hands[key][5] > best_FcardFive)
+								best_FcardFive = best_hands[key][5]
+		#find the best hands
+		for key in best_hands:
+			if(best_hands[key][1] == best_FcardOne and best_hands[key][2] == best_FcardTwo and best_hands[key][3] == best_FcardThree 
+				and best_hands[key][4] == best_FcardFour and best_hands[key][5] == best_FcardFive):
+				result.append(key)
+		return result
+	elif(best == 4):
+		best_S_card = 0
+		for key in best_hands:
+			if(best_S_card < best_hands[key][1]):
+				best_S_card = best_hands[key][1]
+		for key in best_hands:
+			if(best_S_card == best_hands[key][1]):
+				result.append(key)
+		return result
+	elif(best == 3):
+		best_three = -1
+		best_three_kickerOne = -1
+		best_three_kickerTWo = -1
+		#find best three of a kind
+		for key in best_hands:
+			if(best_hands[key][1] == 0):
+				best_three = 0
+				break
+			if(best_hands[key][1] > best_three):
+				best_three = best_hands[key][1]
+		#find best kicker one
+		for key in best_hands:
+			if(best_hands[key][1] == best_three):
+				if(best_hands[key][2] == 0):
+					best_three_kickerOne = 0
+					break
+				if(best_hands[key][2] > best_three_kickerOne):
+					best_three_kickerOne = best_hands[key][2]
 
-
+		#find best kicker two
+		#since we have two kickers, so the worse kicker can't be Ace
+		for key in best_hands:
+			if(best_hands[key][1] == best_three):
+				if(best_hands[key][2] == best_three_kickerOne):
+					if(best_hands[key][3] > best_three_kickerTWo):
+						best_three_kickerTWo = best_hands[key][3]
+		#find the best hands
+		for key in best_hands:
+			if(best_hands[key][1] == best_three and best_hands[key][2] == best_three_kickerOne and best_hands[key][3] == best_three_kickerTWo):
+				result.append(key)
+		return result
+	elif(best == 2):
+		best_pairOne = -1
+		best_pairTwo = -1
+		best_twoPair_kicker = -1
+		#find best pair one
+		for key in best_hands:
+			if(best_hands[key][1] == 0):
+				best_pairOne = 0
+				break
+			if(best_hands[key][1] > best_pairOne):
+				best_pairOne = best_hands[key][1]
+		#find best pair two
+		#it can't be ace
+		for key in best_hands:
+			if(best_hands[key][1] == best_pairOne):
+				if(best_hands[key][2] > best_pairTwo):
+					best_pairTwo = best_hands[key][2]
+		#find best kicker for two pairs
+		for key in best_hands:
+			if(best_hands[key][1] == best_pairOne):
+				if(best_hands[key][2] == best_pairTwo):
+					if(best_hands[key][3] == 0):
+						best_twoPair_kicker = 0
+						break
+					if(best_hands[key][3] > best_twoPair_kicker):
+						best_twoPair_kicker = best_hands[key][3]
+		#find the best hands
+		for key in best_hands:
+			if(best_hands[key][1] == best_pairOne and best_hands[key][2] == best_pairTwo and best_hands[key][3] == best_twoPair_kicker):
+				result.append(key)
+		return result
+	elif(best == 1):
+		best_pair = -1
+		best_pair_kickerOne = -1
+		best_pair_kickerTwo = -1
+		best_pair_kickerThree = -1
+		best_pair_kickerFour = -1
+		#find the best pair 
+		for key in best_hands:
+			if(best_hands[key][1] == 0):
+				best_pair = 0
+				break
+			if(best_hands[key][1] > best_pair):
+				best_pair = best_hands[key][1]
+		#find the best kickerOne
+		for key in best_hands:
+			if(best_hands[key][1] == best_pair):
+				if(best_hands[key][2] == 0):
+					best_pair_kickerOne = 0
+					break
+				if(best_hands[key][2] > best_pair_kickerOne):
+					best_pair_kickerOne = best_hands[key][2]
+		#find the best kickerTwo
+		#can't be ace
+		for key in best_hands:
+			if(best_hands[key][1] == best_pair):
+				if(best_hands[key][2] == best_pair_kickerOne):
+					if(best_hands[key][3] > best_pair_kickerTwo):
+						best_pair_kickerTwo = best_hands[key][3]
+		#find the best kickerThree
+		for key in best_hands:
+			if(best_hands[key][1] == best_pair):
+				if(best_hands[key][2] == best_pair_kickerOne):
+					if(best_hands[key][3] == best_pair_kickerTwo):
+						if(best_hands[key][4] > best_pair_kickerThree):
+							best_pair_kickerThree = best_hands[key][4]
+		#find the best hands
+		for key in best_hands:
+			if(best_hands[key][1] == best_pair and best_hands[key][2] == best_pair_kickerOne and best_hands[key][3] == best_pair_kickerTwo 
+				and best_hands[key][4] == best_pair_kickerThree):
+				result.append(key)
+		return result
+	elif(best == 0):
+		best_cardOne = -1
+		best_cardTwo = -1
+		best_cardThree = -1
+		best_cardFour = -1
+		best_cardFive = -1
+		#find the best cardOne 
+		for key in best_hands:
+			if(best_hands[key][1] == 0):
+				best_cardOne = 0
+				break
+			if(best_hands[key][1] > best_cardOne):
+				best_cardOne = best_hands[key][1]
+		#find the best cardTwo
+		for key in best_hands:
+			if(best_hands[key][1] == best_cardOne):
+				if(best_hands[key][2] > best_cardTwo):
+					best_cardTwo = best_hands[key][2]
+		#find the best cardThree
+		#can't be ace
+		for key in best_hands:
+			if(best_hands[key][1] == best_cardOne):
+				if(best_hands[key][2] == best_cardTwo):
+					if(best_hands[key][3] > best_cardThree):
+						best_cardThree = best_hands[key][3]
+		#find the best cardFour
+		for key in best_hands:
+			if(best_hands[key][1] == best_cardOne):
+				if(best_hands[key][2] == best_cardTwo):
+					if(best_hands[key][3] == best_cardThree):
+						if(best_hands[key][4] > best_cardFour):
+							best_cardFour = best_hands[key][4]
+		#find the best cardFive
+		for key in best_hands:
+			if(best_hands[key][1] == best_cardOne):
+				if(best_hands[key][2] == best_cardTwo):
+					if(best_hands[key][3] == best_cardThree):
+						if(best_hands[key][4] == best_cardFour):
+							if(best_hands[key][5] > best_cardFive)
+								best_cardFive = best_hands[key][5]
+		#find the best hands
+		for key in best_hands:
+			if(best_hands[key][1] == best_cardOne and best_hands[key][2] == best_cardTwo and best_hands[key][3] == best_cardThree 
+				and best_hands[key][4] == best_cardFour and best_hands[key][5] == best_cardFive):
+				result.append(key)
+		return result
 
 
 #hold_em_showdown function returns hand strength of remaining players
@@ -395,7 +657,8 @@ def hold_em_showdown(players,board):
 			continue
 		else:
 			highCard(seven_cards,hand_strength[key])
-
+	winners = []
+	winners = getWinner(hand_strength)
 
 
 		#Determine hand strength from best to the worst
