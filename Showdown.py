@@ -637,6 +637,7 @@ def hold_em_showdown(players,board):
 		hand_strength[key] = []
 		seven_cards = []
 		seven_cards = players[key] + board
+		print seven_cards
 		if isRoyalFlush(seven_cards,hand_strength[key]):
 			continue
 		elif isStraightFlush(seven_cards,hand_strength[key]):
