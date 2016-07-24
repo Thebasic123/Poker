@@ -650,15 +650,14 @@ def getWinner(hand_strength):
 		return result
 
 
-#hold_em_showdown function returns hand strength of remaining players
-def hold_em_showdown(players,board):
-	hand_strength = {}
+#hold_em_showdown function returns hand strength of remaining players(change input dict)
+# return list of winner indexes
+def hold_em_showdown(players,board,hand_strength):
 	#determine each player's hand strength
 	for key in players:
 		hand_strength[key] = []
 		seven_cards = []
 		seven_cards = players[key] + board
-		print seven_cards
 		hand_strength[key] = isRoyalFlush(seven_cards)
 		if hand_strength[key] :
 			continue
@@ -687,10 +686,9 @@ def hold_em_showdown(players,board):
 		if hand_strength[key]:
 			continue
 		hand_strength[key] = highCard(seven_cards)
-	print hand_strength
 	winners = []
 	winners = getWinner(hand_strength)
-	print winners
+	return winners
 
 
 		#Determine hand strength from best to the worst
@@ -698,10 +696,11 @@ def hold_em_showdown(players,board):
 
 
 #testing:
+test = {}
 board1 = [38, 36, 51, 34, 23]
 players1 = {0: [10, 26], 1: [13, 28], 2: [31, 24], 3: [49, 4]}
-hold_em_showdown(players1,board1)
+hold_em_showdown(players1,board1,test)
 
 board2 = [39, 47, 44, 45, 8]
 players2 = {0: [46, 26], 1: [19, 2], 2: [49, 37], 3: [6, 29]}
-hold_em_showdown(players2,board2)
+hold_em_showdown(players2,board2,test)

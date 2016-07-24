@@ -88,21 +88,30 @@ def shuffleDeck(deck):
 			shuffledDeck.append(temp)
 	return shuffledDeck
 
-def reminder(val):
-	num = val % 13
-	return num
-
 newDeck = range(0,52)
 length = 52
 shuffledDeck = shuffleDeck(newDeck)
 #deal cards for 4 players hold-em game
 players = hold_em_preflop(4,shuffledDeck)
 board = []
-print shuffledDeck
 hold_em_flop(shuffledDeck,board)
 hold_em_turn(shuffledDeck,board)
 hold_em_river(shuffledDeck,board)
-print board
-print players
-Showdown.hold_em_showdown(players,board)
+boardPrint = map(numberToCard,board)
+playerPrint = {}
+print "Board is",
+print boardPrint
+for key in players:
+	playerPrint[key] = map(numberToCard,players[key])
+print "Players hands :",
+print playerPrint
+print 111
+hand_strength = {}
+winners = []
+
+winners = Showdown.hold_em_showdown(players,board,hand_strength)
+print "ready"
+print hand_strength
+print "Winner of the pot is: Player",
+print winners
 
