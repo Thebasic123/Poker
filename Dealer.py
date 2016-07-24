@@ -88,6 +88,9 @@ def shuffleDeck(deck):
 			shuffledDeck.append(temp)
 	return shuffledDeck
 
+def reminder(val):
+	num = val % 13
+	return num
 
 newDeck = range(0,52)
 length = 52
@@ -102,5 +105,4 @@ hold_em_river(shuffledDeck,board)
 print board
 print players
 Showdown.hold_em_showdown(players,board)
-
 

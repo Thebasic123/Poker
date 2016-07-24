@@ -22,7 +22,15 @@
 #for all hand strength functions, we input a list which 
 #contains 7 cards
 
-def isRoyalFlush(cards,strength):
+
+#get rid of card suit
+def removeSuit(card):
+	result = card % 13
+	return result
+
+
+
+def isRoyalFlush(cards):
 	strength = []
 	flush_suit = []
 	suitH = []
@@ -49,18 +57,18 @@ def isRoyalFlush(cards,strength):
 	if flush_suit: 
 		flush_suit.sort()
 	else:
-		return False
+		return strength
 	for card in flush_suit:
 		card = card % 13
 
 	if((0 in flush_suit) and (9 in flush_suit) and (10 in flush_suit) and (11 in flush_suit) and (12 in flush_suit)):
 		strength = [9]
-		return True
+		return strength
 	else:
-		return False
+		return strength
 
 
-def isStraightFlush(cards,strength):
+def isStraightFlush(cards):
 	strength = []
 	flush_suit = []
 	suitH = []
@@ -87,7 +95,7 @@ def isStraightFlush(cards,strength):
 	if flush_suit: 
 		flush_suit.sort()
 	else:
-		return False
+		return strength
 	for card in flush_suit:
 		card = card % 13
 	#check whether there is a straight in flush suit or not
@@ -98,7 +106,7 @@ def isStraightFlush(cards,strength):
 	while index < 3:
 		currentIndex = index
 		counter = 0
-		while counter < 5:
+		while counter < len(flush_suit) - 4:
 			if(flush_suit[currentIndex]+1 == flush_suit[currentIndex+1]):
 				currentIndex += 1
 				counter += 1
@@ -107,19 +115,20 @@ def isStraightFlush(cards,strength):
 		if (counter == 5):
 			break
 		index += 1
-	if(index >= 3):
-		return False
+	if(index >= len(flush_suit) - 4):
+		return strength
 	else:
 		strength = [8,flush_suit[index+4]]
-		return True
+		return strength
 
 
 
-def isQuads(cards,strength):
+def isQuads(cards):
 	temp = cards[:]# deep copy
+	strength = []
+	result = []
 	quadCard = -1
-	for card in temp:
-		card = card % 13
+	temp = map(removeSuit,temp)
 	for card in temp:
 		if temp.count(card) == 4:
 			strength.append(card)
@@ -137,18 +146,18 @@ def isQuads(cards,strength):
 			temp.reverse()
 			strength.append(temp[0])
 		strength.insert(0,7)
-		return True
+		return strength
 	else:
-		return False
+		return result
 
 
 
-def isFullHose(cards,strength):
+def isFullHose(cards):
+	strength = []
 	temp = cards[:]
 	threeOfAKind = -1
 	pair = -1
-	for card in temp :
-		card = card % 13
+	temp = map(removeSuit,temp)
 	# find biggest three of a kind first
 	for card in set(temp):
 		if temp.count(card) == 3:
@@ -169,12 +178,12 @@ def isFullHose(cards,strength):
 	if (threeOfAKind >= 0) and (pair >= 0):
 		# 6 is for full house
 		strength = [6,threeOfAKind,pair]
-		return True
+		return strength
 	else:
-		return False
+		return strength
 
 
-def isFlush(cards,strength):
+def isFlush(cards):
 	strength = []
 	flush_suit = []
 	suitH = []
@@ -212,27 +221,30 @@ def isFlush(cards,strength):
 			strength.extend(flush_suit[0:5])
 			
 		strength.insert(0,5)#add hand strength at the top of list 
-		return True
+		return strength
 	else:
-		return False
+		return strength
 
-def isStraight(cards,strength):
+def isStraight(cards):
+	strength = []
 	temp = cards[:]
 	#highest card in straight
 	highest = -1
-	for card in temp:
-		card = card % 13
+	temp = map(removeSuit,temp)
 	temp = set(temp)
 	temp = sorted(temp)
 	counter = 0
 	index = 0
 	currentIndex = 0
+	#make sure temp has more than 5 elements first
+	if(len(temp) < 5):
+		return strength
 	#check 10 to Ace straight first
 	if((0 in temp) and (9 in temp) and (10 in temp) and (11 in temp) and (12 in temp)):
 		strength = [4,0]
-		return True
+		return strength
 	else:
-		while index < 3:
+		while index < (len(temp) - 4):
 			currentIndex = index
 			counter = 0
 			while counter < 5:
@@ -244,18 +256,18 @@ def isStraight(cards,strength):
 			if (counter == 5):
 				break
 			index += 1
-		if(index >= 3):
-			return False
+		if(index >= (len(temp) - 4)):
+			return strength
 		else:
 			strength = [4,temp[index+4]]
-			return True
-def isThreeOfAKind(cards,strength):
+			return strength
+def isThreeOfAKind(cards):
+	strength = []
 	temp = cards[:]
 	threeOfAKind = -1
 	kickerOne = -1
 	kickerTwo = -1
-	for card in temp:
-		card = card % 13
+	temp = map(removeSuit,temp)
 	for card in set(temp):
 		if(temp.count(card)==3):
 			if(card == 0):
@@ -265,7 +277,7 @@ def isThreeOfAKind(cards,strength):
 				if(card > threeOfAKind):
 					threeOfAKind = card
 	if(threeOfAKind == -1):
-		return False
+		return strength
 	else:
 		temp = set(temp)
 		temp = sorted(temp)
@@ -275,21 +287,21 @@ def isThreeOfAKind(cards,strength):
 			strength = [3,threeOfAKind,0,temp[-1]]
 		else:
 			strength = [3,threeOfAKind,temp[-1],temp[-2]]
-		return True
-def isTwoPairs(cards,strength):
+		return strength
+def isTwoPairs(cards):
+	strength = []
 	temp = cards[:]
 	#it might contain 3 pairs, we use a list find the best two 
 	pairs = [] 
 	kicker = -1
-	for card in temp :
-		card = card % 13
+	temp = map(removeSuit,temp)
 	for card in set(temp):
 		if(temp.count(card) == 2):
 			pairs.append(card)
 
 	#find the best two pairs 
 	if(len(pairs) < 2):
-		return False
+		return strength
 	if(len(pairs) > 2):
 		pairs.sort()
 		if(pairs[0]==0):
@@ -301,8 +313,8 @@ def isTwoPairs(cards,strength):
 	temp = set(temp)
 	temp = sorted(temp)
 	indexOne = temp.index(pairs[0])
-	indexTwo = temp.index(pairs[1])
 	del temp[indexOne]
+	indexTwo = temp.index(pairs[1])
 	del temp[indexTwo]
 	if(temp[0] == 0):
 		kicker = 0
@@ -310,19 +322,19 @@ def isTwoPairs(cards,strength):
 	else:
 		kicker = temp[-1]
 		strength = [2,pairs[0],pairs[1],kicker]
-	return True
+	return strength
 
-def isOnePair(cards,strength):
+def isOnePair(cards):
+	strength = []
 	temp = cards[:]
 	pair = -1
-	for card in temp :
-		card = card % 13
+	temp = map(removeSuit,temp)
 	for card in set(temp):
 		if(temp.count(card) == 2):
 			pair = card
 			break # since we run two pair function first, so it has one pair most
 	if(pair == -1):
-		return False
+		return strength
 	temp = set(temp)
 	temp = sorted(temp)
 	index = temp.index(pair)
@@ -332,16 +344,19 @@ def isOnePair(cards,strength):
 		strength = [1,pair,0,temp[-1],temp[-2]]
 	else:
 		strength = [1,pair,temp[-1],temp[-2],temp[-3]]
-	return True
+	return strength
 
 #since High card is the last function we run, we won't return boolean value
-def highCard(cards,strength):
+def highCard(cards):
+	strength = []
 	temp = cards[:]
+	temp = map(removeSuit,temp)
 	temp = sorted(temp)
 	if(temp[0] == 0):
 		strength = [0]+[0]+temp[-4:]
 	else:
 		strength = [0]+temp[-5:]
+	return strength
 
 
 #function gets a dict of hand strength with player index as key
@@ -367,8 +382,11 @@ def getWinner(hand_strength):
 	if(best == 9):
 		return best_hands.keys()
 	elif(best == 8):
-		best_SF_card = 0
+		best_SF_card = -1
 		for key in best_hands:
+			if(best_hands[key][1] == 0):
+				best_SF_card = 0
+				break
 			if(best_SF_card < best_hands[key][1]):
 				best_SF_card = best_hands[key][1]
 		for key in best_hands:
@@ -469,8 +487,11 @@ def getWinner(hand_strength):
 				result.append(key)
 		return result
 	elif(best == 4):
-		best_S_card = 0
+		best_S_card = -1
 		for key in best_hands:
+			if(best_hands[key][1] == 0):
+				best_S_card = 0
+				break
 			if(best_S_card < best_hands[key][1]):
 				best_S_card = best_hands[key][1]
 		for key in best_hands:
@@ -638,26 +659,34 @@ def hold_em_showdown(players,board):
 		seven_cards = []
 		seven_cards = players[key] + board
 		print seven_cards
-		if isRoyalFlush(seven_cards,hand_strength[key]):
+		hand_strength[key] = isRoyalFlush(seven_cards)
+		if hand_strength[key] :
 			continue
-		elif isStraightFlush(seven_cards,hand_strength[key]):
+		hand_strength[key] = isStraightFlush(seven_cards)
+		if hand_strength[key]:
 			continue
-		elif isQuads(seven_cards,hand_strength[key]):
+		hand_strength[key] = isQuads(seven_cards)
+		if hand_strength[key]:
 			continue
-		elif isFullHose(seven_cards,hand_strength[key]):
+		hand_strength[key] = isFullHose(seven_cards)
+		if hand_strength[key]:
 			continue
-		elif isFlush(seven_cards,hand_strength[key]):
+		hand_strength[key] = isFlush(seven_cards)
+		if hand_strength[key]:
 			continue
-		elif isStraight(seven_cards,hand_strength[key]):
+		hand_strength[key] = isStraight(seven_cards)
+		if hand_strength[key]:
 			continue
-		elif isThreeOfAKind(seven_cards,hand_strength[key]):
+		hand_strength[key] = isThreeOfAKind(seven_cards)
+		if hand_strength[key]:
 			continue
-		elif isTwoPairs(seven_cards,hand_strength[key]):
+		hand_strength[key] = isTwoPairs(seven_cards)
+		if hand_strength[key]:
 			continue
-		elif isOnePair(seven_cards,hand_strength[key]):
+		hand_strength[key] = isOnePair(seven_cards)
+		if hand_strength[key]:
 			continue
-		else:
-			highCard(seven_cards,hand_strength[key])
+		hand_strength[key] = highCard(seven_cards)
 	print hand_strength
 	winners = []
 	winners = getWinner(hand_strength)
@@ -666,3 +695,13 @@ def hold_em_showdown(players,board):
 
 		#Determine hand strength from best to the worst
 		#we use functions to determine hand strength 
+
+
+#testing:
+board1 = [38, 36, 51, 34, 23]
+players1 = {0: [10, 26], 1: [13, 28], 2: [31, 24], 3: [49, 4]}
+hold_em_showdown(players1,board1)
+
+board2 = [39, 47, 44, 45, 8]
+players2 = {0: [46, 26], 1: [19, 2], 2: [49, 37], 3: [6, 29]}
+hold_em_showdown(players2,board2)
